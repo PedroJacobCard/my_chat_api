@@ -17,7 +17,7 @@ The API leverages WebSockets to establish persistent connections between clients
 
 ## Interactive API Routes Docs
 
-- http://localhost:3000/docs
+- https://my-chat-api-hke8.onrender.com/docs
 
 ## Models
 
