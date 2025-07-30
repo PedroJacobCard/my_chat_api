@@ -1,8 +1,8 @@
 {
-  "name": "nest-typescript-starter",
+  "name": "my_chat_api",
   "private": true,
   "version": "1.0.0",
-  "description": "Nest TypeScript starter repository",
+  "description": "API Application for My_chat",
   "license": "MIT",
   "scripts": {
     "build": "nest build",
