@@ -30,10 +30,10 @@ The API leverages WebSockets to establish persistent connections between clients
 
 ## Relations
 
-- User.groups n.m GroupParticipants.userId
-- Group.participants n.m GroupParticipants.groupId
-- User.chats n.m ChatParticipants.userId
-- Chat.participants n.m ChatParticipants.chatId
-- User.messages n.1 Message.userId
-- Chat.messages n.1 Message.chatId
-- Group.messages n.1 Message.groupId
+- User.groups n:m GroupParticipants.userId
+- Group.participants n:m GroupParticipants.groupId
+- User.chats n:m ChatParticipants.userId
+- Chat.participants n:m ChatParticipants.chatId
+- User.messages 1:n Message.userId
+- Chat.messages 1:n Message.chatId
+- Group.messages 1:n Message.groupId
