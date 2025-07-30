@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>my_chat</title>
+</head>
+
+<body>
+  <h2>Online:</h2>
+  <ul id="online"></ul>
+  </br>
+
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <script>
+    const socket = io('http://localhost:3000', {
+      auth: {
+        userId: 3,
+        userName: 'Pedro',
+        chatsId: [2, 4, 5],
+        groupsId: [1, 5, 7],
+        token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMsInVzZXJuYW1lIjoiUGVKYWNvYkNhcmQiLCJpYXQiOjE3NTMzNjY2NTcsImV4cCI6MTc1Mzk3MTQ1N30.YyL2Yrru3UeiYdoUvg5Pecae9TLakJ_YXMS6jUQLbk4'
+      }
+    });
+
+    socket.on('connect', () => {
+      console.log('Verbunden mit Chat-Server');
+    });
+
+    socket.on('online_users', (userIds) => {
+      const list = document.querySelector('#online');
+
+      if (!list) return;
+
+      list.innerHTML = '';
+
+      userIds.map(id => {
+        const li = document.createElement('li');
+        li.innerText = `${id}`;
+        list.appendChild(li);
+      })
+    });
+
+    socket.on('chat_request', (data) => {
+      const accept = confirm(`User ${data.fromUserId} möchte einen Chat mit dir starten. Akzeptieren?`);
+      socket.emit('chat_request_response', { fromUserId: data.fromUserId, accepted: accept });
+    });
+
+
+    socket.on('group_request', (data) => {
+      const accept = confirm(`User ${data.creatorId} created the Group "${data.groupName}" and wants you to take part of it. Do you accept?`);
+      socket.emit('group_request_response', { creatorId: data.creatorId, accepted: accept });
+    });
+
+    socket.auth.chatsId.map((chatId) => {
+      socket.on(`receive_chat${chatId}_message`, (msg) => {
+        const li = document.createElement('li');
+        li.textContent = `${msg.username}: ${msg.message}`;
+        document.getElementById(`chat${chatId}`).appendChild(li);
+      });
+    });
+
+    socket.auth.groupsId.map((groupId) => {
+      socket.on(`receive_group${groupId}_message`, (msg) => {
+        const li = document.createElement('li');
+        li.textContent = `${msg.username}: ${msg.message}`;
+        document.getElementById(`group${groupId}`).appendChild(li);
+      });
+    });
+
+    // function sendChatMessage(chatId) {
+    //   const username = socket.auth.userName;
+    //   const message = document.getElementById(`chat${chatId}Message`).value;
+    //   socket.emit(`chat${chatId}_message`, { username, message });
+    // }
+
+    // function sendGroupMessage(groupId) {
+    //   const username = socket.auth.userName;
+    //   const message = document.getElementById(`group${groupId}Message`).value;
+    //   socket.emit(`group${groupId}_message`, { username, message });
+    // }
+  </script>
+  <script>
+    socket.auth.chatsId.map((chatId) => {
+      const chatDiv = document.createElement('div');
+      chatDiv.id = chatId;
+
+      const heading = document.createElement('h1');
+      heading.textContent = 'Chat ' + chatId;
+
+      const messageInput = document.createElement('input');
+      messageInput.id = `chat${chatId}Message`;
+      messageInput.placeholder = 'Nachricht';
+
+      const sendButton = document.createElement('button');
+      sendButton.textContent = 'Senden';
+      sendButton.onclick = function () {
+        const username = socket.auth.userName;
+        const message = document.getElementById(`chat${chatId}Message`).value;
+        socket.emit(`chat_message`, { chatId, username, message });
+      };
+
+      const list = document.createElement('ul');
+      list.id = `chat${chatId}`;
+
+      chatDiv.append(heading, messageInput, sendButton, list);
+
+      document.body.appendChild(chatDiv);
+    })
+
+    socket.auth.groupsId.map((groupId) => {
+      const groupDiv = document.createElement('div');
+      groupDiv.id = groupId;
+
+      const heading = document.createElement('h1');
+      heading.textContent = 'Group ' + groupId;
+
+      const messageInput = document.createElement('input');
+      messageInput.id = `group${groupId}Message`;
+      messageInput.placeholder = 'Nachricht';
+
+      const sendButton = document.createElement('button');
+      sendButton.textContent = 'Senden';
+      sendButton.onclick = function () {
+        const username = socket.auth.userName;
+        const message = document.getElementById(`group${groupId}Message`).value;
+        socket.emit(`group_message`, { groupId, username, message });
+      };
+
+      const list = document.createElement('ul');
+      list.id = `group${groupId}`;
+
+      groupDiv.append(heading, messageInput, sendButton, list);
+
+      document.body.appendChild(groupDiv);
+    })
+  </script>
+</body>
+
+</html>
