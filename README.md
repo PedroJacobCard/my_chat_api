@@ -2,7 +2,7 @@
 
 ## Description
 
-This is a real-time chat API developed following the principles of the MVC (Model-View-Controller) design pattern. It enables seamless communication between users by allowing the exchange of messages in real time.
+This is a real-time chat API developed following the principles of the MVC (Model-View-Controller) design pattern. It enables seamless communication between users by allowing the exchange of messages in real time, and web security through encrypt login and routes guard with tokens.
 
 The API leverages WebSockets to establish persistent connections between clients, facilitating low-latency message delivery and live updates across multiple active sessions within the same web application.
 
@@ -13,6 +13,7 @@ The API leverages WebSockets to establish persistent connections between clients
 - PostgreSQL
 - PrismaORM
 - Sockets.io
+- JWT
 
 ## Interactive API Routes Docs
 
