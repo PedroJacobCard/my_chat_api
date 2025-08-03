@@ -54,7 +54,13 @@ export class ChatService {
       return chats.map((chat) => {
         return {
           id: chat.id,
-          participants: chat.participants,
+          participants: chat.participants.map((par) => {
+            return {
+              userId: par.userId,
+              chatId: par.chatId,
+              username: par.user.username,
+            };
+          }),
         };
       });
     } catch (error: unknown) {
@@ -96,13 +102,26 @@ export class ChatService {
           },
         },
         include: {
-          participants: true,
+          participants: {
+            include: {
+              user: true,
+            },
+          },
         },
       });
 
       if (!chat) throw new NotFoundException('Chat not founded.');
 
-      return chat;
+      return {
+        id: chat.id,
+        participants: chat.participants.map((par) => {
+          return {
+            userId: par.userId,
+            chatId: par.chatId,
+            username: par.user.username,
+          };
+        }),
+      };
     } catch (error: unknown) {
       if (error instanceof Error)
         throw new InternalServerErrorException('An server error ocoured.', error.message);
@@ -125,13 +144,26 @@ export class ChatService {
           id,
         },
         include: {
-          participants: true,
+          participants: {
+            include: {
+              user: true,
+            },
+          },
         },
       });
 
       if (!chat) throw new NotFoundException('Chat not founded.');
 
-      return chat;
+      return {
+        id: chat.id,
+        participants: chat.participants.map((par) => {
+          return {
+            userId: par.userId,
+            chatId: par.chatId,
+            username: par.user.username,
+          };
+        }),
+      };
     } catch (error: unknown) {
       if (error instanceof Error)
         throw new InternalServerErrorException('An server error ocoured.', error.message);

@@ -1,6 +1,7 @@
 export type ChatParticipantsDto = {
   userId: number;
   chatId: number;
+  username: string;
 };
 
 export type ReturnChatDto = {
