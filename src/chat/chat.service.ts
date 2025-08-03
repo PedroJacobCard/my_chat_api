@@ -41,7 +41,11 @@ export class ChatService {
           },
         },
         include: {
-          participants: true,
+          participants: {
+            include: {
+              user: true,
+            },
+          },
         },
       });
 
