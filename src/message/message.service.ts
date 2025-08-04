@@ -28,7 +28,7 @@ export class MessageService {
 
     const schema = z.object({
       belonger: z.string().min(4, 'Too schort'),
-      id: z.number().int().positive(),
+      chatOrGroupId: z.number().int().positive(),
     });
 
     const validationResult = schema.safeParse(getMessagesDto);
