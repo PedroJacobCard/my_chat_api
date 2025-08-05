@@ -33,12 +33,13 @@ export class ChatGateway {
   async sendChatRequestWithReply(
     toUserId: number,
     fromUserId: number,
+    fromUserName: string,
   ): Promise<{ message: string; accepted: boolean }> {
     const socketId = this.userGateway.getOnlineUsers().get(toUserId);
 
     if (!socketId) return { message: 'User is not created or connected', accepted: false };
 
-    this.server?.to(socketId).emit('chat_request', { fromUserId });
+    this.server?.to(socketId).emit('chat_request', { fromUserId, fromUserName });
 
     return new Promise((resolve) => {
       this.pendingRequests.set(toUserId, { resolve, fromUserId });

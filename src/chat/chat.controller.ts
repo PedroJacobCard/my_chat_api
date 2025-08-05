@@ -32,7 +32,7 @@ export class ChatController {
   @Post()
   @ApiOperation({
     summary:
-      'Sends a request and receive a response in realtime using Websockets, to create a chat record, returning chat ID and an Array of chat participants. Json body expects: {fromUserId: number, toUserId: number}',
+      'Sends a request and receive a response in realtime using Websockets, to create a chat record, returning chat ID and an Array of chat participants. Json body expects: {fromUserId: number, fromUserName: string, toUserId: number}',
   })
   @ApiResponse({ status: 201, description: 'User accepted the request.' })
   createChat(@Body() createChatDto: CreateChatDto) {

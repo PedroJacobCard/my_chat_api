@@ -71,11 +71,16 @@ export class ChatService {
   }
 
   async createChat(createChatDto: CreateChatDto): Promise<ReturnCreateChatDto> {
-    if (createChatDto.toUserId === null || createChatDto.fromUserId === null)
+    if (
+      createChatDto.toUserId === null ||
+      createChatDto.fromUserId === null ||
+      createChatDto.fromUserName === ''
+    )
       throw new BadRequestException('Users ID must be provided.');
 
     const schema = z.object({
       fromUserId: z.number().int().positive(),
+      fromUserName: z.string().min(1, 'Username must have at least 1 character.'),
       toUserId: z.number().int().positive(),
     });
 
@@ -87,6 +92,7 @@ export class ChatService {
       const accept = await this.gateway.sendChatRequestWithReply(
         createChatDto.toUserId,
         createChatDto.fromUserId,
+        createChatDto.fromUserName,
       );
 
       const createData = [createChatDto.fromUserId, createChatDto.toUserId];

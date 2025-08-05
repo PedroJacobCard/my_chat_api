@@ -11,6 +11,7 @@ export type ReturnChatDto = {
 
 export type CreateChatDto = {
   fromUserId: number;
+  fromUserName: string;
   toUserId: number;
 };
 

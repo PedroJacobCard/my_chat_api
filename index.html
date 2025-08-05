@@ -43,7 +43,7 @@
     });
 
     socket.on('chat_request', (data) => {
-      const accept = confirm(`User ${data.fromUserId} möchte einen Chat mit dir starten. Akzeptieren?`);
+      const accept = confirm(`User ${data.fromUserName} möchte einen Chat mit dir starten. Akzeptieren?`);
       socket.emit('chat_request_response', { fromUserId: data.fromUserId, accepted: accept });
     });
 
