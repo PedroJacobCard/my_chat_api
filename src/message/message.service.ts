@@ -46,6 +46,9 @@ export class MessageService {
             },
             skip,
             take,
+            orderBy: {
+              createdAt: 'desc',
+            },
           });
           break;
         case 'group':
@@ -55,6 +58,9 @@ export class MessageService {
             },
             skip,
             take,
+            orderBy: {
+              createdAt: 'desc',
+            },
           });
           break;
         default:
