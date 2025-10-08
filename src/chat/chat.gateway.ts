@@ -6,6 +6,7 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
+import { MessageDto } from 'src/dto/MessageDto';
 import { SendChatMessageDto } from 'src/dto/SendMessageDto';
 import { UserGateway } from 'src/user/user.gateway';
 
@@ -73,5 +74,9 @@ export class ChatGateway {
   @SubscribeMessage('chat_message')
   handleMessage(@MessageBody() sendMessageDto: SendChatMessageDto): void {
     this.server!.emit(`receive_chat${sendMessageDto.chatId}_message`, sendMessageDto);
+  }
+
+  handleChangeUpdatedMessage(MessageDto: MessageDto) {
+    this.server?.emit(`chat${MessageDto.chatId}_message_update`, { MessageDto });
   }
 }

@@ -4,6 +4,7 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
+import { ChatGateway } from 'src/chat/chat.gateway';
 import {
   CreateMessageDto,
   DeleteMessageDto,
@@ -16,7 +17,10 @@ import * as z from 'zod';
 
 @Injectable()
 export class MessageService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private chatGateway: ChatGateway,
+  ) {}
 
   async getAllMessages(
     skip: number,
@@ -109,6 +113,7 @@ export class MessageService {
               chatId: createMessageDto.chatId,
             },
           });
+          this.chatGateway.handleChangeUpdatedMessage(message);
           break;
         case 'group':
           message = await this.prisma.message.create({
